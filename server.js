@@ -9,5 +9,5 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
-    console.log('THE SERVER IS RUNNING AT ${PORT} YOU PEASANT');
+    console.log(`THE SERVER IS RUNNING AT ${PORT} YOU PEASANT`);
 });
