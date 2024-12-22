@@ -1,13 +1,18 @@
-// models/schema.js
-const pool = require('../config/db');
+import { faker } from "@faker-js/faker";
+const pool = require("../config/db");
 
 // Create a for loop that seeds 100 users into our db with fake data.
 
+// for (let i = 0; i < 100; i++  ) {
+//     console.log(i);
+//     let person = faker.person.firstName();
+//     console.log(person);
+// }
 
 const fakeUserGen = async () => {
   try {
-    // Users table
-    await pool.query(`
+    for (let i = 0; i < 100; i++) {
+      await pool.query(`
       INSERT INTO users (
         first_name
         , last_name
@@ -22,23 +27,28 @@ const fakeUserGen = async () => {
         , postal_code
         , profile_picture_url
       ) VALUES (
-        'Jeff'
-        , 'Smith'
-        , 'jsmith@gmail.com'
-        , 'password12345'
-        , '555-555-5656'
-        , '1994-08-14'
-        , '632 hogwarts way'
-        , 'Old Bridge'
-        , 'New Jersey'
-        , 'USA'
-        , '30534'
+          '${faker.person.firstName()}'
+          , '${faker.person.lastName()}'
+          , '${faker.internet.email()}'
+          , '${faker.internet.password()}'
+          , '${faker.phone.number("###-###-####")}'
+          , '${
+            faker.date
+              .between({ from: "1994-01-01", to: "2006-12-31" })
+          }'
+          , '${faker.location.streetAddress()}'
+          , '${faker.location.city()}'
+          , '${faker.location.state()}'
+          , '${faker.location.country()}'
+          , '${faker.location.zipCode()}'
         , NULL
       );
     `);
-    console.log('Test users created successfully');
+    console.log(`Created user ${i + 1} of 100`);
+    }
+    console.log("Test users created successfully");
   } catch (err) {
-    console.error('Error creating test user:', err.message);
+    console.error("Error creating test user:", err.message);
     throw err;
   }
 };
