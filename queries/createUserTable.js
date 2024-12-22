@@ -32,4 +32,6 @@ const createUserTable = async () => {
   }
 };
 
+createUserTable();
+
 module.exports = { createUserTable };

@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+const { faker } = require("@faker-js/faker");
 const pool = require("../config/db");
 
 // Create a for loop that seeds 100 users into our db with fake data.
@@ -12,6 +12,11 @@ const pool = require("../config/db");
 const fakeUserGen = async () => {
   try {
     for (let i = 0; i < 100; i++) {
+      const dateOfBirth = faker.date
+        .between({ from: "1994-01-01", to: "2006-12-31" })
+        .toISOString()
+        .split("T")[0];
+
       await pool.query(`
       INSERT INTO users (
         first_name
@@ -31,11 +36,8 @@ const fakeUserGen = async () => {
           , '${faker.person.lastName()}'
           , '${faker.internet.email()}'
           , '${faker.internet.password()}'
-          , '${faker.phone.number("###-###-####")}'
-          , '${
-            faker.date
-              .between({ from: "1994-01-01", to: "2006-12-31" })
-          }'
+          , '${faker.phone.number({ style: "national" })}'
+          , '${dateOfBirth}'
           , '${faker.location.streetAddress()}'
           , '${faker.location.city()}'
           , '${faker.location.state()}'
@@ -44,7 +46,7 @@ const fakeUserGen = async () => {
         , NULL
       );
     `);
-    console.log(`Created user ${i + 1} of 100`);
+      console.log(`Created user ${i + 1} of 100`);
     }
     console.log("Test users created successfully");
   } catch (err) {
@@ -53,4 +55,5 @@ const fakeUserGen = async () => {
   }
 };
 
+fakeUserGen();
 module.exports = { fakeUserGen };
